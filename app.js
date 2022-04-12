@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt');
 const port = 3000;
 
 
-const {loadUser, saveDataUser} = require('./utils/userData');
+const {loadUser, saveDataUser, findUser} = require('./utils/userData');
 //users
 
 // use ejs
