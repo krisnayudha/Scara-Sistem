@@ -4,8 +4,9 @@ const expressLayout = require('express-ejs-layouts');
 const bcrypt = require('bcrypt');
 const port = 3000;
 
-const {loadUser, saveDataUser, findUser} = require('./utils/userData');
+const {loadUser, saveDataUser} = require('./utils/userData');
 //users
+
 
 // use ejs
 app.set('view engine', 'ejs');
@@ -44,7 +45,7 @@ app.post('/register', async (req, res) => {
         saveDataUser(users);
         res.redirect('/sign-in-sign-up');
     } catch {
-        res.redirect('/');
+        res.redirect('/sign-in-sign-up');
     }
     console.log(loadUser());
     // console.log(users);
@@ -54,23 +55,40 @@ app.post('/login', async(req, res) => {
     try {
         // load users.json
         // ambil data users dan di compare antara username dan password
-        const username = req.body.username
-        const password = req.body.password
-        const hashedPassword = await bcrypt.hash(req.body.password, 10);
+        const username = req.body.username;
+        const password = req.body.password;
         const users = loadUser();
-        // const checkUser = users.find((users) => {
-        //     users.username === username
-            
+        // const checkUser = users.find((user) => {
+        //     if (user.username === username) {
+        //         bcrypt.compare(password, user.password, (err, res) => {
+        //             if (res) {
+        //                 console.log('your pass is matched');
+        //                 return res;
+        //             }else{
+        //                 console.log('your pass is not match');
+        //                 return false;
+        //             }
+        //         });
+        //     }
+        //     // return true;
         // });
-        // if (checkUser) {
-        //     res.redirect('/home')
-        // }
-        if(username === 'admin' && password === 'admin'){
-            res.redirect('/home')
+
+        const getUser = users.find((user) => user.username === username);
+        const getPass = users.find((user) => {
+            if(bcrypt.compare(password, user.password)){
+                return true;
+            };
+        });
+
+        if (getUser && getPass) {
+            return res.redirect('/home');
         }
 
-        console.log(checkUser);
-        console.log(username)
+        console.log(getUser);
+        console.log(getPass);
+
+        // console.log(checkUser);
+        // console.log(username);
     } catch {
         
     }
