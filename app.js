@@ -29,7 +29,11 @@ app.get('/sign-in-sign-up', (req, res) => {
 })
 
 app.get('/home', (req, res) => {
-    res.send("INI HOME");
+    res.render('home', {
+        title : 'Home',
+        layout : 'layouts/main-layout',
+        style : 'style/sidebar.css'
+    });
 })
 
 app.post('/register', async (req, res) => {
